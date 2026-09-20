@@ -2,6 +2,10 @@
 
 This document is the implementation contract for separating expenses, purchase orders, purchase bills, and payments into production-ready workflows.
 
+## Implementation Status
+
+Phase 1 foundation is implemented. It currently includes reusable status enums and transition rules, server-side money calculation, company-scoped payment-term persistence and API, delivery-address snapshot support, automatic current-financial-year calculation from company settings, and company/financial-year document-number sequence persistence. Ledger management, voucher posting, and document-specific purchase workflows are intentionally deferred to later phases.
+
 The work is intentionally divided into small phases. Each phase has a narrow scope, a database/API boundary, tests, and an exit criterion. Do not start the next phase until the current phase passes its exit criteria.
 
 ## 1. Business Rules
@@ -98,10 +102,16 @@ The target architecture keeps reusable document infrastructure but gives each do
 Use these bounded modules:
 
 ```text
+common
+  money
+  financialyear
+  number
+  term
+  address
+
 purchase
   purchase-order
   purchase-bill
-  purchase-shared
 
 expense
 
