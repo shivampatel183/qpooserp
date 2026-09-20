@@ -4,7 +4,7 @@ This document is the implementation contract for separating expenses, purchase o
 
 ## Implementation Status
 
-Phase 1 foundation is implemented. It currently includes reusable status enums and transition rules, server-side money calculation, company-scoped payment-term persistence and API, delivery-address snapshot support, automatic current-financial-year calculation from company settings, and company/financial-year document-number sequence persistence. Ledger management, voucher posting, and document-specific purchase workflows are intentionally deferred to later phases.
+Phase 1 foundation and Phase 2 purchase-order workflow are implemented. The purchase-order slice includes company-scoped persistence, item-only lines, server-side totals, automatic numbering, payment terms, delivery address snapshots, list/detail/create/update APIs, draft submission, approval, cancellation, frontend routes, and focused integration tests. Ledger management, voucher posting, receiving, and document-specific bill/payment workflows are intentionally deferred to later phases.
 
 The work is intentionally divided into small phases. Each phase has a narrow scope, a database/API boundary, tests, and an exit criterion. Do not start the next phase until the current phase passes its exit criteria.
 
@@ -473,7 +473,7 @@ Exit criteria:
 
 ### Phase 2: Purchase order workflow
 
-Goal: create a complete non-financial purchase order.
+Status: implemented. Goal: create a complete non-financial purchase order.
 
 Tasks:
 
