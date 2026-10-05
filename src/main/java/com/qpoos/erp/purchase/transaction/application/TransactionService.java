@@ -8,6 +8,7 @@ import com.qpoos.erp.product.domain.ProductEntity;
 import com.qpoos.erp.product.infrastructure.ProductRepository;
 import com.qpoos.erp.purchase.transaction.domain.PaymentStatus;
 import com.qpoos.erp.purchase.transaction.domain.TransactionEntity;
+import com.qpoos.erp.purchase.transaction.domain.TransactionType;
 import com.qpoos.erp.purchase.transaction.dto.TransactionLineRequest;
 import com.qpoos.erp.purchase.transaction.dto.TransactionLineResponse;
 import com.qpoos.erp.purchase.transaction.dto.TransactionListResponse;
@@ -119,8 +120,17 @@ public class TransactionService {
         transaction.setTaxAmount(amountOrZero(request.taxAmount()));
         transaction.setRoundOff(amountOrZero(request.roundOff()));
         transaction.setTotalAmount(amountOrZero(request.totalAmount()));
-        transaction.setPaymentDate(request.paymentDate());
-        transaction.setPaymentStatus(request.paymentStatus() == null ? PaymentStatus.UNPAID : request.paymentStatus());
+        if (request.transactionType() == TransactionType.EXPENSE) {
+            transaction.setPaymentDate(
+                request.paymentDate() == null ? request.transactionDate() : request.paymentDate()
+            );
+            transaction.setPaymentStatus(PaymentStatus.PAID);
+        } else {
+            transaction.setPaymentDate(request.paymentDate());
+            transaction.setPaymentStatus(
+                request.paymentStatus() == null ? PaymentStatus.UNPAID : request.paymentStatus()
+            );
+        }
         transaction.setNotes(blankToNull(request.notes()));
         transaction.setAttachments(blankToNull(request.attachments()));
     }
@@ -254,6 +264,7 @@ public class TransactionService {
                 vendor == null ? null : vendor.getId(),
                 vendor == null ? null : vendor.getDisplayName(),
                 transaction.getDueDate(),
+                transaction.getPaymentDate(),
                 transaction.getTotalAmount(),
                 transaction.getPaymentStatus()
         );
